@@ -1,3 +1,3 @@
 # application
 
-the go module "bitwormhole.com/starter/application"
+the go module "github.com/starter-go/application"
