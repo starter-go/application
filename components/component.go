@@ -53,6 +53,7 @@ func SelectorForID(id ID) Selector {
 
 // Instance 用于创建组件实例
 type Instance interface {
+	Ready() bool
 	Get() any
 	Info() Info
 	Inject(i Injection) error
@@ -90,4 +91,10 @@ type Injection interface {
 	context.Context
 
 	Select(selector Selector) ([]Instance, error)
+
+	SelectOne(selector Selector) (Instance, error)
+
+	GetByID(id ID) (Instance, error)
+
+	GetWithHolder(holder Holder) (Instance, error)
 }

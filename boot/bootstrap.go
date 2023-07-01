@@ -2,7 +2,6 @@ package boot
 
 import (
 	"github.com/starter-go/application"
-	"github.com/starter-go/application/components"
 )
 
 // Run 运行指定的模块
@@ -15,11 +14,10 @@ func Run(m application.Module) error {
 
 // Bootstrap 是 starter 的应用启动器
 type Bootstrap struct {
-	profile    string
-	main       application.Module
-	context    application.Context
-	modules    []application.Module
-	components components.Table
+	profile string
+	main    application.Module
+	context application.Context
+	modules []application.Module
 }
 
 // Run 运行
@@ -29,8 +27,8 @@ func (inst *Bootstrap) Run(m application.Module) error {
 
 	steps = append(steps, inst.loadModules)
 	steps = append(steps, inst.loadProperties)
-	steps = append(steps, inst.loadComponents)
 	steps = append(steps, inst.loadContext)
+	steps = append(steps, inst.runMainLoop)
 
 	for _, step := range steps {
 		err := step()
@@ -52,11 +50,13 @@ func (inst *Bootstrap) loadProperties() error {
 	return loader.load()
 }
 
-func (inst *Bootstrap) loadComponents() error {
-	loader := &componentsLoader{b: inst}
+func (inst *Bootstrap) loadContext() error {
+	loader := &contextLoader{b: inst}
 	return loader.load()
 }
 
-func (inst *Bootstrap) loadContext() error {
-	return nil // todo : impl
+func (inst *Bootstrap) runMainLoop() error {
+	lm := inst.context.GetLifeManager()
+	runner := &mainLoopRunner{lm: lm}
+	return runner.Run()
 }

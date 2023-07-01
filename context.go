@@ -10,15 +10,18 @@ import (
 	"github.com/starter-go/application/environment"
 	"github.com/starter-go/application/properties"
 	"github.com/starter-go/application/resources"
+	"github.com/starter-go/base/safe"
 )
 
 // Context 表示一个 starter 应用上下文
 type Context interface {
 	io.Closer
-
 	context.Context
 
+	Mode() safe.Mode
+
 	NewChild() Context
+	NewInjection(scope components.Scope) Injection
 
 	GetArguments() arguments.Table
 	GetAttributes() attributes.Table
@@ -27,7 +30,26 @@ type Context interface {
 	GetProperties() properties.Table
 	GetResources() resources.Table
 
-	GetComponent(selector string) (any, error)
-	GetComponentByID(id string) (any, error)
-	ListComponentIDs() []string
+	GetModules() []Module
+	GetMainModule() Module
+
+	GetLifeManager() LifeManager
+
+	SelectComponents(selector components.Selector) ([]any, error)
+	SelectComponent(selector components.Selector) (any, error)
+	GetComponent(id components.ID) (any, error)
+	ListComponentIDs() []components.ID
+}
+
+// Injection 表示一个注入上下文
+type Injection interface {
+	components.Injection
+
+	Scope() components.Scope
+
+	Parent() Context
+
+	LifeManager() LifeManager
+
+	Complete() error
 }

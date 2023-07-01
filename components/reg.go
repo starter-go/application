@@ -1,7 +1,5 @@
 package components
 
-import "context"
-
 // Registry 提供组件注册服务
 type Registry interface {
 	New() *Registration
@@ -22,5 +20,5 @@ type Registration struct {
 	Aliases    string // 别名列表，项与项之间以空格符(SPACE)分隔
 	Scope      string // 作用域 'singleton'|'prototype'
 	NewFunc    func() any
-	InjectFunc func(c context.Context, instance any) error
+	InjectFunc func(c Injection, instance any) error
 }

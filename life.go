@@ -3,22 +3,31 @@ package application
 ////////////////////////////////////////////////////////////////////////////////
 // 定义各个生命周期管理函数
 
+// OnCreateFunc ...
 type OnCreateFunc func() error
 
+// OnStartPreFunc ...
 type OnStartPreFunc func() error
 
+// OnStartFunc ...
 type OnStartFunc func() error
 
+// OnStartPostFunc ...
 type OnStartPostFunc func() error
 
+// OnLoopFunc ...
 type OnLoopFunc func() error
 
+// OnStopPreFunc ...
 type OnStopPreFunc func() error
 
+// OnStopFunc ...
 type OnStopFunc func() error
 
+// OnStopPostFunc ...
 type OnStopPostFunc func() error
 
+// OnDestroyFunc ...
 type OnDestroyFunc func() error
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,4 +50,11 @@ type Life struct {
 // Lifecycle ...
 type Lifecycle interface {
 	Life() *Life
+}
+
+// LifeManager ...
+type LifeManager interface {
+	Add(l *Life)
+
+	GetMaster() *Life
 }
