@@ -6,4 +6,4 @@ go 1.18
 
 require github.com/starter-go/vlog v0.9.1 // direct
 
-require github.com/starter-go/base v0.9.3 // direct
+require github.com/starter-go/base v0.9.4 // direct

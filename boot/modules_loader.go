@@ -3,6 +3,7 @@ package boot
 import (
 	"github.com/starter-go/application"
 	"github.com/starter-go/base/util"
+	"github.com/starter-go/vlog"
 )
 
 type modulesLoader struct {
@@ -19,7 +20,18 @@ func (inst *modulesLoader) load() error {
 	}
 	res := inst.makeResult()
 	inst.b.modules = res
+	inst.log()
 	return nil
+}
+
+func (inst *modulesLoader) log() {
+	all := inst.b.modules
+	for _, m := range all {
+		name := m.Name()
+		ver := m.Version()
+		rev := m.Revision()
+		vlog.Info("use module %s@%s-r%d", name, ver, rev)
+	}
 }
 
 func (inst *modulesLoader) sort(list []*moduleHolder) {

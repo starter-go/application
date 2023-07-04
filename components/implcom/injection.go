@@ -2,6 +2,7 @@ package implcom
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/starter-go/application"
@@ -12,6 +13,7 @@ type injection struct {
 	scope  components.Scope
 	parent application.Context
 	lm     application.LifeManager
+	ext    components.InjectionExt
 
 	table map[components.ID]*hInstance
 }
@@ -171,6 +173,31 @@ func (inst *injection) tryCompleteOnce() (int, error) {
 		}
 	}
 	return count, nil
+}
+
+func (inst *injection) GetProperty(selector components.Selector) (string, error) {
+	const (
+		prefix = "${"
+		suffix = "}"
+	)
+	name := selector.String()
+	name = strings.TrimSpace(name)
+	if strings.HasPrefix(name, prefix) && strings.HasSuffix(name, suffix) {
+		name = name[len(prefix) : len(name)-len(suffix)]
+		name = strings.TrimSpace(name)
+		return inst.parent.GetProperties().GetProperty(name)
+	}
+	return name, nil
+}
+
+func (inst *injection) Ext() components.InjectionExt {
+	ext := inst.ext
+	if ext == nil {
+		ie := &injectionExt{injection: inst}
+		ext = ie.init()
+		inst.ext = ext
+	}
+	return ext
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -8,8 +8,10 @@ type contextLoader struct {
 
 func (inst *contextLoader) load() error {
 
-	mods := inst.b.modules
+	boot := inst.b
+	mods := boot.modules
 	builder := implcom.NewBuilder()
+	builder.SetCollections(&boot.collections)
 
 	for _, m := range mods {
 		err := m.RegisterComponents(builder.Registry())

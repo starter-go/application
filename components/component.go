@@ -1,7 +1,5 @@
 package components
 
-import "context"
-
 ////////////////////////////////////////////////////////////////////////////////
 
 // Scope 表示组件的作用域
@@ -84,17 +82,4 @@ type Holder interface {
 type Ref interface {
 	Selector() Selector
 	Holder() Holder
-}
-
-// Injection 表示一个依赖注入上下文
-type Injection interface {
-	context.Context
-
-	Select(selector Selector) ([]Instance, error)
-
-	SelectOne(selector Selector) (Instance, error)
-
-	GetByID(id ID) (Instance, error)
-
-	GetWithHolder(holder Holder) (Instance, error)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"os"
 	"strings"
 
 	"github.com/starter-go/application"
@@ -15,8 +16,11 @@ var theResFS embed.FS
 
 func main() {
 	vlog.Debug("hello")
+	opt := &boot.Options{
+		Args: os.Args,
+	}
 	mod := m3()
-	err := boot.Run(mod)
+	err := boot.Run(mod, opt)
 	if err != nil {
 		panic(err)
 	}
