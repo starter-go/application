@@ -25,7 +25,7 @@ type Injection interface {
 type InjectionExt interface {
 	Injection() Injection
 
-	GetContext() context.Context // 返回一个 application.Context
+	GetApplicationContext() context.Context // 返回一个 application.Context
 
 	GetString(selector Selector) string
 	GetBool(selector Selector) bool

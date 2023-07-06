@@ -157,6 +157,6 @@ func (inst *injectionExt) GetAny(selector components.Selector) any {
 	return inst.GetComponent(selector)
 }
 
-func (inst *injectionExt) GetContext() context.Context {
+func (inst *injectionExt) GetApplicationContext() context.Context {
 	return inst.injection.GetApplicationContext()
 }
