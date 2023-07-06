@@ -1,6 +1,7 @@
 package implcom
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/starter-go/application/components"
@@ -149,4 +150,13 @@ func (inst *injectionExt) ListComponents(selector components.Selector) []any {
 		dst = append(dst, i.Get())
 	}
 	return dst
+}
+
+// GetAny 是 GetComponent 的别名
+func (inst *injectionExt) GetAny(selector components.Selector) any {
+	return inst.GetComponent(selector)
+}
+
+func (inst *injectionExt) GetContext() context.Context {
+	return inst.injection.GetApplicationContext()
 }

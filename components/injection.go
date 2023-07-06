@@ -12,6 +12,8 @@ type Injection interface {
 
 	GetByID(id ID) (Instance, error)
 
+	GetApplicationContext() context.Context
+
 	GetProperty(selector Selector) (string, error)
 
 	GetWithHolder(holder Holder) (Instance, error)
@@ -23,10 +25,13 @@ type Injection interface {
 type InjectionExt interface {
 	Injection() Injection
 
+	GetContext() context.Context // 返回一个 application.Context
+
 	GetString(selector Selector) string
 	GetBool(selector Selector) bool
 	GetRune(selector Selector) rune
 	GetByte(selector Selector) byte
+	GetAny(selector Selector) any
 
 	GetInt(selector Selector) int
 	GetInt8(selector Selector) int8

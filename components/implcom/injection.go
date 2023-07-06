@@ -1,6 +1,7 @@
 package implcom
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -198,6 +199,10 @@ func (inst *injection) Ext() components.InjectionExt {
 		inst.ext = ext
 	}
 	return ext
+}
+
+func (inst *injection) GetApplicationContext() context.Context {
+	return inst.parent
 }
 
 ////////////////////////////////////////////////////////////////////////////////

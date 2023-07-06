@@ -16,8 +16,8 @@ import (
 	"github.com/starter-go/base/safe"
 )
 
-// context 实现 application.Context
-type context struct {
+// appContext 实现 application.Context
+type appContext struct {
 	mode safe.Mode
 
 	moduleMain application.Module
@@ -39,73 +39,73 @@ type context struct {
 	res    resources.Table
 }
 
-func (ctx *context) _Impl() application.Context {
+func (ctx *appContext) _Impl() application.Context {
 	return ctx
 }
 
-func (ctx *context) Deadline() (deadline time.Time, ok bool) {
+func (ctx *appContext) Deadline() (deadline time.Time, ok bool) {
 	now := time.Now()
 	return now, false
 }
 
-func (ctx *context) Done() <-chan struct{} {
+func (ctx *appContext) Done() <-chan struct{} {
 
 	return nil
 }
 
-func (ctx *context) Err() error {
+func (ctx *appContext) Err() error {
 	return nil
 }
 
-func (ctx *context) Value(key any) any {
+func (ctx *appContext) Value(key any) any {
 	return nil
 }
 
-func (ctx *context) Close() error {
+func (ctx *appContext) Close() error {
 	return nil
 }
 
-func (ctx *context) Mode() safe.Mode {
+func (ctx *appContext) Mode() safe.Mode {
 	return ctx.mode
 }
 
-func (ctx *context) NewChild() application.Context {
-	child := &context{}
+func (ctx *appContext) NewChild() application.Context {
+	child := &appContext{}
 	// todo ...
 	return child
 }
 
-func (ctx *context) NewInjection(scope components.Scope) application.Injection {
+func (ctx *appContext) NewInjection(scope components.Scope) application.Injection {
 	ai1 := &injection{}
 	ai2 := ai1.init(ctx, scope)
 	return ai2
 }
 
-func (ctx *context) GetArguments() arguments.Table {
+func (ctx *appContext) GetArguments() arguments.Table {
 	return ctx.args
 }
 
-func (ctx *context) GetAttributes() attributes.Table {
+func (ctx *appContext) GetAttributes() attributes.Table {
 	return ctx.atts
 }
 
-func (ctx *context) GetComponents() components.Table {
+func (ctx *appContext) GetComponents() components.Table {
 	return ctx.com
 }
 
-func (ctx *context) GetEnvironment() environment.Table {
+func (ctx *appContext) GetEnvironment() environment.Table {
 	return ctx.env
 }
 
-func (ctx *context) GetProperties() properties.Table {
+func (ctx *appContext) GetProperties() properties.Table {
 	return ctx.props
 }
 
-func (ctx *context) GetResources() resources.Table {
+func (ctx *appContext) GetResources() resources.Table {
 	return ctx.res
 }
 
-func (ctx *context) GetModules() []application.Module {
+func (ctx *appContext) GetModules() []application.Module {
 	src := ctx.modules
 	size := len(src)
 	dst := make([]application.Module, size)
@@ -113,11 +113,11 @@ func (ctx *context) GetModules() []application.Module {
 	return dst
 }
 
-func (ctx *context) GetMainModule() application.Module {
+func (ctx *appContext) GetMainModule() application.Module {
 	return ctx.moduleMain
 }
 
-func (ctx *context) SelectComponent(selector components.Selector) (any, error) {
+func (ctx *appContext) SelectComponent(selector components.Selector) (any, error) {
 	hlist, err := ctx.com.Select(selector)
 	if err != nil {
 		return nil, err
@@ -129,7 +129,7 @@ func (ctx *context) SelectComponent(selector components.Selector) (any, error) {
 	return ctx.onlyOneComponent(olist, selector)
 }
 
-func (ctx *context) SelectComponents(selector components.Selector) ([]any, error) {
+func (ctx *appContext) SelectComponents(selector components.Selector) ([]any, error) {
 	hlist, err := ctx.com.Select(selector)
 	if err != nil {
 		return nil, err
@@ -137,7 +137,7 @@ func (ctx *context) SelectComponents(selector components.Selector) ([]any, error
 	return ctx.activeComponents(hlist...)
 }
 
-func (ctx *context) GetComponent(id components.ID) (any, error) {
+func (ctx *appContext) GetComponent(id components.ID) (any, error) {
 	h, err := ctx.com.Get(id)
 	if err != nil {
 		return nil, err
@@ -150,7 +150,7 @@ func (ctx *context) GetComponent(id components.ID) (any, error) {
 	return ctx.onlyOneComponent(olist, sel)
 }
 
-func (ctx *context) activeComponents(holders ...components.Holder) ([]any, error) {
+func (ctx *appContext) activeComponents(holders ...components.Holder) ([]any, error) {
 
 	instanceList := make([]components.Instance, 0)
 	injection := ctx.NewInjection(0) // todo: scope ...
@@ -176,7 +176,7 @@ func (ctx *context) activeComponents(holders ...components.Holder) ([]any, error
 	return dst, nil
 }
 
-func (ctx *context) onlyOneComponent(olist []any, sel components.Selector) (any, error) {
+func (ctx *appContext) onlyOneComponent(olist []any, sel components.Selector) (any, error) {
 	count := 0
 	if olist != nil {
 		count = len(olist)
@@ -190,10 +190,10 @@ func (ctx *context) onlyOneComponent(olist []any, sel components.Selector) (any,
 	return nil, fmt.Errorf("there are %d components with selector:%s", count, sel.String())
 }
 
-func (ctx *context) ListComponentIDs() []components.ID {
+func (ctx *appContext) ListComponentIDs() []components.ID {
 	return ctx.com.ListIDs()
 }
 
-func (ctx *context) GetLifeManager() application.LifeManager {
+func (ctx *appContext) GetLifeManager() application.LifeManager {
 	return ctx.lm
 }

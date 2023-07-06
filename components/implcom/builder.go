@@ -92,7 +92,7 @@ func (inst *Builder) Create() (application.Context, error) {
 
 	comtab := inst.registry.Create(mode)
 
-	ctx := &context{
+	ctx := &appContext{
 		mode: mode,
 
 		args:   args,
