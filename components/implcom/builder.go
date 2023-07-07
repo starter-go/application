@@ -68,7 +68,7 @@ func (inst *Builder) SetResources(t resources.Table) {
 }
 
 // Registry 用来获取组件注册接口
-func (inst *Builder) Registry() components.Registry {
+func (inst *Builder) Registry() application.ComponentRegistry {
 	return &inst.registry
 }
 
@@ -116,7 +116,7 @@ func (inst *Builder) Create() (application.Context, error) {
 
 func (inst *Builder) loadSingletonComponents(injection application.Injection) error {
 	const singleton = components.ScopeSingleton
-	ctx := injection.Parent()
+	ctx := injection.GetContext()
 	ctable := ctx.GetComponents()
 	ids := ctable.ListIDs()
 	for _, id := range ids {

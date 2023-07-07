@@ -3,13 +3,14 @@ package implcom
 import (
 	"strings"
 
+	"github.com/starter-go/application"
 	"github.com/starter-go/application/components"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
 
 type registrationNormalizer struct {
-	r *components.Registration
+	r *application.ComponentRegistration
 }
 
 func (inst *registrationNormalizer) GetID() components.ID {

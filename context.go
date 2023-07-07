@@ -42,19 +42,6 @@ type Context interface {
 	ListComponentIDs() []components.ID
 }
 
-// Injection 表示一个注入上下文
-type Injection interface {
-	components.Injection
-
-	Scope() components.Scope
-
-	Parent() Context
-
-	LifeManager() LifeManager
-
-	Complete() error
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 // Collections 持有上下文中的各种资源集合

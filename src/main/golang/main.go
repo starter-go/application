@@ -7,7 +7,6 @@ import (
 
 	"github.com/starter-go/application"
 	"github.com/starter-go/application/boot"
-	"github.com/starter-go/application/components"
 	"github.com/starter-go/vlog"
 )
 
@@ -31,19 +30,15 @@ func m1() application.Module {
 	mb.Name("demo.m1").Version("0.0.1").Revision(1)
 	mb.EmbedResources(theResFS, "res")
 
-	mb.Components(func(r components.Registry) error {
-		com1 := r.New()
+	mb.Components(func(r application.ComponentRegistry) error {
+		com1 := r.NewRegistration()
 		com1.ID = "com-1"
 		com1.Classes = "Demo Example"
 		com1.Aliases = "demo-1 demo-2"
 		com1.Scope = "singleton"
 
-		com1.InjectFunc = func(c components.Injection, instance any) error {
-			c2inst, err := c.GetByID("com-2")
-			if err != nil {
-				return err
-			}
-			c2 := c2inst.Get().(*Com2)
+		com1.InjectFunc = func(c application.InjectionExt, instance any) error {
+			c2 := c.GetComponent("#com-2").(*Com2)
 			c1 := instance.(*Com1)
 			c1.c2 = c2
 			return nil
@@ -52,8 +47,7 @@ func m1() application.Module {
 			return &Com1{}
 		}
 
-		r.Register(com1)
-		return nil
+		return com1.Commit()
 	})
 
 	return mb.Create()
@@ -64,19 +58,15 @@ func m2() application.Module {
 	mb.Name("demo.m2").Version("0.0.1").Revision(1)
 	mb.EmbedResources(theResFS, "res")
 
-	mb.Components(func(r components.Registry) error {
-		com2 := r.New()
+	mb.Components(func(r application.ComponentRegistry) error {
+		com2 := r.NewRegistration()
 		com2.ID = "com-2"
 		com2.Classes = "Demo Example"
 		com2.Aliases = "demo-1 demo-2"
 		com2.Scope = "singleton"
 
-		com2.InjectFunc = func(c components.Injection, instance any) error {
-			c1inst, err := c.GetByID("com-1")
-			if err != nil {
-				return err
-			}
-			c1 := c1inst.Get().(*Com1)
+		com2.InjectFunc = func(c application.InjectionExt, instance any) error {
+			c1 := c.GetComponent("#com-1").(*Com1)
 			c2 := instance.(*Com2)
 			c2.c1 = c1
 			return nil
@@ -85,8 +75,7 @@ func m2() application.Module {
 			return &Com2{}
 		}
 
-		r.Register(com2)
-		return nil
+		return com2.Commit()
 	})
 
 	m1 := m1()
@@ -99,8 +88,8 @@ func m3() application.Module {
 	mb.Name("demo.m3").Version("0.0.1").Revision(1)
 	mb.EmbedResources(theResFS, "res")
 
-	mb.Components(func(r components.Registry) error {
-		com1 := r.New()
+	mb.Components(func(r application.ComponentRegistry) error {
+		com1 := r.NewRegistration()
 		com1.ID = "demo3"
 		com1.Classes = "Demo Example"
 		com1.Aliases = "demo-1 demo-2"
@@ -109,17 +98,12 @@ func m3() application.Module {
 		com1.NewFunc = func() any {
 			return &strings.Builder{}
 		}
-		com1.InjectFunc = func(c components.Injection, instance any) error {
+		com1.InjectFunc = func(inj application.InjectionExt, instance any) error {
 
-			d1, err := c.SelectOne("#com-1")
-			if err != nil {
-				return err
-			}
-
+			// d1  :=  inj.GetComponent ("#com-1")
+			str := ""
 			builder := instance.(*strings.Builder)
-			str := d1.Info().ID().String()
 			builder.WriteString(str)
-
 			return nil
 		}
 

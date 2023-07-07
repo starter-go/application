@@ -11,10 +11,11 @@ import (
 )
 
 type injection struct {
-	scope  components.Scope
+	scope components.Scope
+
 	parent application.Context
 	lm     application.LifeManager
-	ext    components.InjectionExt
+	ext    application.InjectionExt
 
 	table map[components.ID]*hInstance
 }
@@ -191,7 +192,7 @@ func (inst *injection) GetProperty(selector components.Selector) (string, error)
 	return name, nil
 }
 
-func (inst *injection) Ext() components.InjectionExt {
+func (inst *injection) Ext() application.InjectionExt {
 	ext := inst.ext
 	if ext == nil {
 		ie := &injectionExt{injection: inst}
@@ -199,6 +200,10 @@ func (inst *injection) Ext() components.InjectionExt {
 		inst.ext = ext
 	}
 	return ext
+}
+
+func (inst *injection) GetContext() application.Context {
+	return inst.parent
 }
 
 func (inst *injection) GetApplicationContext() context.Context {

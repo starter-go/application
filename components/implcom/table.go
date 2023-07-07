@@ -3,6 +3,7 @@ package implcom
 import (
 	"fmt"
 
+	"github.com/starter-go/application"
 	"github.com/starter-go/application/components"
 	"github.com/starter-go/base/safe"
 )
@@ -99,15 +100,18 @@ type componentTableBuilder struct {
 	holders []components.Holder
 }
 
-func (inst *componentTableBuilder) _Impl() components.Registry {
+func (inst *componentTableBuilder) _impl() application.ComponentRegistry {
 	return inst
 }
 
-func (inst *componentTableBuilder) New() *components.Registration {
-	return &components.Registration{}
+func (inst *componentTableBuilder) NewRegistration() *application.ComponentRegistration {
+	r := inst._impl()
+	return &application.ComponentRegistration{
+		Registry: r,
+	}
 }
 
-func (inst *componentTableBuilder) Register(src *components.Registration) {
+func (inst *componentTableBuilder) Register(src *application.ComponentRegistration) error {
 
 	rn := &registrationNormalizer{r: src}
 	id := rn.GetID()
@@ -123,6 +127,8 @@ func (inst *componentTableBuilder) Register(src *components.Registration) {
 	h.init(info, factory)
 
 	inst.holders = append(inst.holders, h)
+
+	return nil
 }
 
 func (inst *componentTableBuilder) Create(mode safe.Mode) components.Table {

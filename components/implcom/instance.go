@@ -6,7 +6,7 @@ import (
 )
 
 type comInstance struct {
-	reg          *components.Registration
+	reg          *application.ComponentRegistration
 	info         components.Info
 	target       any
 	hasInject    bool
@@ -43,7 +43,9 @@ func (inst *comInstance) Inject(i components.Injection) error {
 		return nil
 	}
 
-	err := fn(i, t)
+	i2 := i.(application.Injection)
+	i2x := i2.Ext()
+	err := fn(i2x, t)
 	if err != nil {
 		return err
 	}

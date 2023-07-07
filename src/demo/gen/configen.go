@@ -3,11 +3,11 @@ package gen
 import (
 	"io"
 
-	"github.com/starter-go/application/components"
+	"github.com/starter-go/application"
 	"github.com/starter-go/application/src/demo/parts"
 )
 
-func Config(r components.Registry) error {
+func Config(r application.ComponentRegistry) error {
 
 	c1 := &com1{}
 	c2 := &com2{}
@@ -23,26 +23,24 @@ func Config(r components.Registry) error {
 type com1 struct {
 }
 
-func (inst *com1) cfg(r components.Registry) error {
-	x := r.New()
+func (inst *com1) cfg(r application.ComponentRegistry) error {
+	x := r.NewRegistration()
 	x.Classes = "parts.Com1"
 	x.ID = "com-1"
 	x.Aliases = "io.Closer"
 	x.Scope = ""
 	x.NewFunc = inst.new
 	x.InjectFunc = inst.inject
-	r.Register(x)
-	return nil
+	return x.Commit()
 }
 
 func (inst *com1) new() any {
 	return &parts.Com1{}
 }
 
-func (inst *com1) inject(ci components.Injection, instance any) error {
+func (inst *com1) inject(inj application.InjectionExt, instance any) error {
 	o := instance.(*parts.Com1)
-	cix := ci.Ext()
-	if cix == nil || o == nil {
+	if inj == nil || o == nil {
 	}
 	return nil
 }
@@ -52,26 +50,24 @@ func (inst *com1) inject(ci components.Injection, instance any) error {
 type com2 struct {
 }
 
-func (inst *com2) cfg(r components.Registry) error {
-	x := r.New()
+func (inst *com2) cfg(r application.ComponentRegistry) error {
+	x := r.NewRegistration()
 	x.Classes = ""
 	x.ID = "com-2"
 	x.Aliases = ""
 	x.Scope = ""
 	x.NewFunc = inst.new
 	x.InjectFunc = inst.inject
-	r.Register(x)
-	return nil
+	return x.Commit()
 }
 
 func (inst *com2) new() any {
 	return &parts.Com2{}
 }
 
-func (inst *com2) inject(ci components.Injection, instance any) error {
+func (inst *com2) inject(cix application.InjectionExt, instance any) error {
 
 	o := instance.(*parts.Com2)
-	cix := ci.Ext()
 
 	o.F1 = cix.GetString("${p.com2.string}")
 	o.F2 = cix.GetInt("${p.com2.int}")

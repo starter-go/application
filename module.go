@@ -1,7 +1,6 @@
 package application
 
 import (
-	"github.com/starter-go/application/components"
 	"github.com/starter-go/application/resources"
 )
 
@@ -12,7 +11,7 @@ type Module interface {
 	Revision() int
 	Dependencies() []Module
 	Resources() resources.Table
-	RegisterComponents(r components.Registry) error
+	RegisterComponents(r ComponentRegistry) error
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +22,7 @@ type myModule struct {
 	revision int
 	deps     []Module
 	res      resources.Table
-	comRegFn components.RegistryHandlerFunc
+	registry ComponentRegistryFunc
 }
 
 func (inst *myModule) _Impl() Module {
@@ -50,8 +49,8 @@ func (inst *myModule) Resources() resources.Table {
 	return inst.res
 }
 
-func (inst *myModule) RegisterComponents(r components.Registry) error {
-	fn := inst.comRegFn
+func (inst *myModule) RegisterComponents(r ComponentRegistry) error {
+	fn := inst.registry
 	if fn == nil || r == nil {
 		return nil
 	}

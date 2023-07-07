@@ -3,7 +3,6 @@ package application
 import (
 	"embed"
 
-	"github.com/starter-go/application/components"
 	"github.com/starter-go/application/resources"
 )
 
@@ -14,7 +13,7 @@ type ModuleBuilder struct {
 	revision int
 	res      resources.Table
 	deps     []Module
-	comRegFn components.RegistryHandlerFunc
+	registry ComponentRegistryFunc
 }
 
 // Name 方法用来设置模块名称
@@ -48,8 +47,14 @@ func (inst *ModuleBuilder) EmbedResources(fs embed.FS, basepath string) *ModuleB
 }
 
 // Components 用于设置组件注册函数
-func (inst *ModuleBuilder) Components(fn components.RegistryHandlerFunc) *ModuleBuilder {
-	inst.comRegFn = fn
+// func (inst *ModuleBuilder) Components(fn components.RegistryHandlerFunc) *ModuleBuilder {
+// 	inst.comRegFn = fn
+// 	return inst
+// }
+
+// Components 用于设置组件注册函数
+func (inst *ModuleBuilder) Components(fn ComponentRegistryFunc) *ModuleBuilder {
+	inst.registry = fn
 	return inst
 }
 
@@ -64,7 +69,7 @@ func (inst *ModuleBuilder) Create() Module {
 
 	m.deps = inst.deps
 	m.res = inst.res
-	m.comRegFn = inst.comRegFn
+	m.registry = inst.registry
 
 	if m.name == "" {
 		m.name = "unnamed"

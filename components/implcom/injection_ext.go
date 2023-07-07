@@ -1,22 +1,22 @@
 package implcom
 
 import (
-	"context"
 	"strconv"
 
+	"github.com/starter-go/application"
 	"github.com/starter-go/application/components"
 	"github.com/starter-go/vlog"
 )
 
 type injectionExt struct {
-	injection components.Injection
+	injection application.Injection
 }
 
-func (inst *injectionExt) init() components.InjectionExt {
+func (inst *injectionExt) init() application.InjectionExt {
 	return inst
 }
 
-func (inst *injectionExt) Injection() components.Injection {
+func (inst *injectionExt) GetInjection() application.Injection {
 	return inst.injection
 }
 
@@ -160,6 +160,6 @@ func (inst *injectionExt) GetAny(selector components.Selector) any {
 	return inst.GetComponent(selector)
 }
 
-func (inst *injectionExt) GetApplicationContext() context.Context {
-	return inst.injection.GetApplicationContext()
+func (inst *injectionExt) GetContext() application.Context {
+	return inst.injection.GetContext()
 }

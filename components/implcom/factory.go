@@ -3,11 +3,12 @@ package implcom
 import (
 	"fmt"
 
+	"github.com/starter-go/application"
 	"github.com/starter-go/application/components"
 )
 
 type comFactory struct {
-	r *components.Registration
+	r *application.ComponentRegistration
 }
 
 func (inst *comFactory) _Impl() components.Factory {
