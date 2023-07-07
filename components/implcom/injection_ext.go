@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/starter-go/application/components"
+	"github.com/starter-go/vlog"
 )
 
 type injectionExt struct {
@@ -141,13 +142,15 @@ func (inst *injectionExt) GetComponent(selector components.Selector) any {
 }
 
 func (inst *injectionExt) ListComponents(selector components.Selector) []any {
+	dst := make([]any, 0)
 	src, err := inst.injection.Select(selector)
 	if err != nil {
-		panic(err)
-	}
-	dst := make([]any, 0)
-	for _, i := range src {
-		dst = append(dst, i.Get())
+		vlog.Warn("%v", err)
+		// panic(err)
+	} else {
+		for _, i := range src {
+			dst = append(dst, i.Get())
+		}
 	}
 	return dst
 }
