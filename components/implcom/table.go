@@ -11,6 +11,8 @@ import (
 ////////////////////////////////////////////////////////////////////////////////
 
 type comTable struct {
+	mode       safe.Mode
+	lock       safe.Lock
 	holders    map[components.ID]components.Holder   // map[id]holder
 	selections map[components.Selector]*comSelection // map[selector]selection
 }
@@ -19,11 +21,21 @@ func (inst *comTable) _Impl() components.Table {
 	return inst
 }
 
-func (inst *comTable) init() {
+func (inst *comTable) init(mode safe.Mode) {
+	if mode == nil {
+		mode = safe.Default()
+	}
+	inst.mode = mode
+	inst.lock = mode.NewLock()
 	inst.holders = make(map[components.ID]components.Holder)
+	inst.selections = nil
 }
 
 func (inst *comTable) Get(id components.ID) (components.Holder, error) {
+
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
+
 	tab := inst.holders
 	h := tab[id]
 	if h == nil {
@@ -37,6 +49,9 @@ func (inst *comTable) Put(h components.Holder) error {
 	if h == nil {
 		return nil
 	}
+
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
 
 	tab := inst.holders
 	id := h.Info().ID()
@@ -52,6 +67,9 @@ func (inst *comTable) Put(h components.Holder) error {
 }
 
 func (inst *comTable) Select(selector components.Selector) ([]components.Holder, error) {
+
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
 
 	selections := inst.selections
 	if selections == nil {
@@ -86,12 +104,37 @@ func (inst *comTable) loadSelections() (map[components.Selector]*comSelection, e
 }
 
 func (inst *comTable) ListIDs() []components.ID {
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
 	src := inst.holders
 	dst := make([]components.ID, 0)
 	for id := range src {
 		dst = append(dst, id)
 	}
 	return dst
+}
+
+func (inst *comTable) Export(dst map[components.ID]components.Holder) map[components.ID]components.Holder {
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
+	if dst == nil {
+		dst = make(map[components.ID]components.Holder)
+	}
+	src := inst.holders
+	for k, v := range src {
+		dst[k] = v
+	}
+	return dst
+}
+
+func (inst *comTable) Import(src map[components.ID]components.Holder) {
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
+	dst := inst.holders
+	for k, v := range src {
+		dst[k] = v
+	}
+	inst.selections = nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +182,7 @@ func (inst *componentTableBuilder) Create(mode safe.Mode) components.Table {
 		dst[id] = h
 	}
 	tab := &comTable{}
+	tab.init(mode)
 	tab.holders = dst
 	return tab
 }

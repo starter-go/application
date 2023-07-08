@@ -55,6 +55,5 @@ type Lifecycle interface {
 // LifeManager ...
 type LifeManager interface {
 	Add(l *Life)
-
 	GetMaster() *Life
 }

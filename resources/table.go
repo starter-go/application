@@ -11,6 +11,9 @@ type Table interface {
 	Paths() []string
 
 	GetResource(path string) (Resource, error)
+
+	Export(dst map[string]Resource) map[string]Resource
+	Import(src map[string]Resource)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +46,28 @@ func (inst *table) GetResource(path string) (Resource, error) {
 		return nil, fmt.Errorf("no resource with path [%s]", path)
 	}
 	return res, nil
+}
+
+func (inst *table) Export(dst map[string]Resource) map[string]Resource {
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
+	if dst == nil {
+		dst = make(map[string]Resource)
+	}
+	src := inst.t
+	for k, v := range src {
+		dst[k] = v
+	}
+	return dst
+}
+
+func (inst *table) Import(src map[string]Resource) {
+	inst.lock.Lock()
+	defer inst.lock.Unlock()
+	dst := inst.t
+	for k, v := range src {
+		dst[k] = v
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

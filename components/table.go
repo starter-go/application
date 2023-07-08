@@ -6,4 +6,7 @@ type Table interface {
 	Put(h Holder) error
 	Select(selector Selector) ([]Holder, error)
 	ListIDs() []ID
+
+	Export(dst map[ID]Holder) map[ID]Holder
+	Import(src map[ID]Holder)
 }

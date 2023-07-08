@@ -7,12 +7,28 @@ import (
 	"github.com/starter-go/application"
 	"github.com/starter-go/application/boot"
 	"github.com/starter-go/application/src/demo/gen"
+	"github.com/starter-go/base/safe"
 )
 
 func main() {
-	opt := &boot.Options{
-		Args: os.Args,
-	}
+
+	mode := safe.Safe()
+	coll := &application.Collections{}
+	coll.Complete(mode)
+
+	coll.Attributes.SetAttribute("demo-attr-name", "demo-attr-obj")
+	coll.Environment.SetEnv("demo-env-name", "demo-env-value")
+	coll.Properties.SetProperty("demo-prop-name", "demo-prop-value")
+	coll.Parameters.SetParam("demo-param-name", "demo-param-value")
+
+	opt := &boot.Options{}
+	opt.Mode = mode
+	opt.Args = os.Args
+	opt.Attributes = coll.Attributes
+	opt.Environment = coll.Environment
+	opt.Parameters = coll.Parameters
+	opt.Properties = coll.Properties
+
 	mod := theModule()
 	err := boot.Run(mod, opt)
 	if err != nil {

@@ -30,7 +30,7 @@ func (inst *propertiesLoader) loadProfileName() error {
 	list := inst.listProperties()
 	profile := inst.profile
 	for _, t := range list {
-		value, err := t.GetProperty(name)
+		value, err := t.GetPropertyRequired(name)
 		if err == nil {
 			profile = value
 		}

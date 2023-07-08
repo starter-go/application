@@ -4,6 +4,8 @@ github.com/starter-go/base v0.9.3 h1:VrzYqccuMVQzWF/6/4GEZa/EzG3LMQSPLZcSSwSxe48
 github.com/starter-go/base v0.9.3/go.mod h1:cTaamu+V1rSWCnfkeebl7yVZHlZiBHzxNVZap47wbtw=
 github.com/starter-go/base v0.9.4 h1:PF48Jtp95iJTh8Y3LFmghjWHGaSEufA01unq5KlHFV0=
 github.com/starter-go/base v0.9.4/go.mod h1:cTaamu+V1rSWCnfkeebl7yVZHlZiBHzxNVZap47wbtw=
+github.com/starter-go/base v0.9.5 h1:kH1VI0ags5rWG6zHt483c5bUie5q+RnPXMf1N1arAUY=
+github.com/starter-go/base v0.9.5/go.mod h1:cTaamu+V1rSWCnfkeebl7yVZHlZiBHzxNVZap47wbtw=
 github.com/starter-go/vlog v0.0.0-20220717123140-f2a39cf6cc90 h1:XLuzWKA6Qg/7RHWD2O6rNRqS1t45L9EhE/2rme7qNz4=
 github.com/starter-go/vlog v0.0.0-20220717123140-f2a39cf6cc90/go.mod h1:bb4xDVyOD0+tAhaiscUmuzsFJ+/EL+qE79Je8U0ZqTQ=
 github.com/starter-go/vlog v0.9.0 h1:RuWHk9dLb9JPKflDrROsYhjAkoxAHI7eZ3avHyJXtQw=

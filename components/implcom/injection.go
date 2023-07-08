@@ -187,7 +187,7 @@ func (inst *injection) GetProperty(selector components.Selector) (string, error)
 	if strings.HasPrefix(name, prefix) && strings.HasSuffix(name, suffix) {
 		name = name[len(prefix) : len(name)-len(suffix)]
 		name = strings.TrimSpace(name)
-		return inst.parent.GetProperties().GetProperty(name)
+		return inst.parent.GetProperties().GetPropertyRequired(name)
 	}
 	return name, nil
 }

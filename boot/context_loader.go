@@ -10,7 +10,7 @@ func (inst *contextLoader) load() error {
 
 	boot := inst.b
 	mods := boot.modules
-	builder := implcom.NewBuilder()
+	builder := implcom.NewBuilder(inst.b.mode)
 	builder.SetCollections(&boot.collections)
 
 	for _, m := range mods {

@@ -138,6 +138,6 @@ func (inst *Builder) loadSingletonComponents(injection application.Injection) er
 ////////////////////////////////////////////////////////////////////////////////
 
 // NewBuilder 新建一个上下文创建器
-func NewBuilder() *Builder {
-	return &Builder{}
+func NewBuilder(mode safe.Mode) *Builder {
+	return &Builder{mode: mode}
 }
