@@ -9,24 +9,23 @@ import (
 	"github.com/starter-go/application/parameters"
 	"github.com/starter-go/application/properties"
 	"github.com/starter-go/application/resources"
+	"github.com/starter-go/base/lang"
 	"github.com/starter-go/base/safe"
 )
 
 // Builder 用来创建 application.Context
 type Builder struct {
-	// args   arguments.Table
-	// atts   attributes.Table
-	// env    environment.Table
-	// params parameters.Table
-	// props  properties.Table
-	// res    resources.Table
-	// com    components.Table
-
 	collections application.Collections
+	mainMod     application.Module // 主模块
+	modules     []application.Module
+	registry    componentTableBuilder
+	mode        safe.Mode
+}
 
-	registry componentTableBuilder
-
-	mode safe.Mode
+// SetModules ...
+func (inst *Builder) SetModules(mods []application.Module, main application.Module) {
+	inst.mainMod = main
+	inst.modules = mods
 }
 
 // SetArguments ...
@@ -102,6 +101,9 @@ func (inst *Builder) Create() (application.Context, error) {
 		params: params,
 		props:  props,
 		res:    res,
+
+		moduleMain: inst.mainMod,
+		modules:    inst.modules,
 	}
 
 	injection := ctx.NewInjection(components.ScopeSingleton)
@@ -110,8 +112,36 @@ func (inst *Builder) Create() (application.Context, error) {
 		return nil, err
 	}
 	ctx.lm = injection.LifeManager()
+	ctx.lm.Add(inst.makeLifeForContext(ctx))
 
 	return ctx, nil
+}
+
+func (inst *Builder) makeLifeForContext(ctx *appContext) *application.Life {
+
+	l := &application.Life{}
+
+	l.OnCreate = func() error {
+		ctx.createdAt = lang.Now()
+		return nil
+	}
+
+	l.OnStartPost = func() error {
+		ctx.startedAt = lang.Now()
+		return nil
+	}
+
+	l.OnStopPost = func() error {
+		ctx.stoppedAt = lang.Now()
+		return nil
+	}
+
+	l.OnDestroy = func() error {
+		ctx.destroyAt = lang.Now()
+		return nil
+	}
+
+	return l
 }
 
 func (inst *Builder) loadSingletonComponents(injection application.Injection) error {

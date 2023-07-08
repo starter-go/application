@@ -12,6 +12,7 @@ func (inst *contextLoader) load() error {
 	mods := boot.modules
 	builder := implcom.NewBuilder(inst.b.mode)
 	builder.SetCollections(&boot.collections)
+	builder.SetModules(mods, boot.main)
 
 	for _, m := range mods {
 		err := m.RegisterComponents(builder.Registry())
