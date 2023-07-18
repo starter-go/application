@@ -2,6 +2,7 @@ package resources
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/starter-go/base/safe"
 )
@@ -13,7 +14,14 @@ type Table interface {
 	GetResource(path string) (Resource, error)
 
 	Export(dst map[string]Resource) map[string]Resource
+
 	Import(src map[string]Resource)
+
+	ReadBinary(path string) ([]byte, error)
+
+	ReadText(path string) (string, error)
+
+	Open(path string) (io.ReadCloser, error)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +76,30 @@ func (inst *table) Import(src map[string]Resource) {
 	for k, v := range src {
 		dst[k] = v
 	}
+}
+
+func (inst *table) ReadBinary(path string) ([]byte, error) {
+	r, err := inst.GetResource(path)
+	if err != nil {
+		return nil, err
+	}
+	return r.ReadBinary()
+}
+
+func (inst *table) ReadText(path string) (string, error) {
+	r, err := inst.GetResource(path)
+	if err != nil {
+		return "", err
+	}
+	return r.ReadText()
+}
+
+func (inst *table) Open(path string) (io.ReadCloser, error) {
+	r, err := inst.GetResource(path)
+	if err != nil {
+		return nil, err
+	}
+	return r.Open()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
