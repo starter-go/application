@@ -74,6 +74,7 @@ func (inst *masterLife) init(src []*application.Life) {
 			continue
 		}
 		item2 := &lifeWrapper{}
+		item2.Order = item1.Order
 		item2.OnCreate = item1.OnCreate
 		item2.OnStartPre = item1.OnStartPre
 		item2.OnStart = item1.OnStart
@@ -87,7 +88,7 @@ func (inst *masterLife) init(src []*application.Life) {
 		dst = append(dst, item2)
 	}
 	inst.items = dst
-	sort.Sort(inst)
+	inst.sort()
 }
 
 func (inst *masterLife) prepareItem(l *lifeWrapper) {
@@ -249,4 +250,8 @@ func (inst *masterLife) Less(i1, i2 int) bool {
 func (inst *masterLife) Swap(i1, i2 int) {
 	list := inst.items
 	list[i1], list[i2] = list[i2], list[i1]
+}
+
+func (inst *masterLife) sort() {
+	sort.Sort(inst)
 }
