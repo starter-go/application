@@ -121,7 +121,7 @@ type propertiesLoaderModuleHolder struct {
 func (inst *propertiesLoaderModuleHolder) load1(builder *propertiesLoaderBuilder) {
 	p := inst.props1
 	if p == nil {
-		p = inst.loadByPath("/application.properties")
+		p = inst.tryLoadByPath("/application.properties")
 		inst.props1 = p
 	}
 	builder.add(p)
@@ -130,30 +130,26 @@ func (inst *propertiesLoaderModuleHolder) load1(builder *propertiesLoaderBuilder
 func (inst *propertiesLoaderModuleHolder) load2(builder *propertiesLoaderBuilder, profile string) {
 	p := inst.props2
 	if p == nil {
-		p = inst.loadByPath("/application-" + profile + ".properties")
+		p = inst.tryLoadByPath("/application-" + profile + ".properties")
 		inst.props2 = p
 	}
 	builder.add(p)
 }
 
-func (inst *propertiesLoaderModuleHolder) loadByPath(path string) properties.Table {
-	table := properties.NewTable(nil)
-	res, err := inst.mod.Resources().GetResource(path)
+func (inst *propertiesLoaderModuleHolder) tryLoadByPath(path string) properties.Table {
+	table, err := inst.loadByPath(path)
 	if err != nil {
-		vlog.Warn("%v", err)
-		return table
+		vlog.Debug("error: %v", err)
 	}
-	text, err := res.ReadText()
-	if err != nil {
-		vlog.Warn("%v", err)
-		return table
-	}
-	table, err = properties.Parse(text, nil)
-	if err != nil {
-		vlog.Warn("%v", err)
-		return table
+	if table == nil {
+		table = properties.NewTable(nil)
 	}
 	return table
+}
+
+func (inst *propertiesLoaderModuleHolder) loadByPath(path string) (properties.Table, error) {
+	res := inst.mod.Resources()
+	return properties.LoadFromResource(path, res, nil)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
