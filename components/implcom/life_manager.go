@@ -132,7 +132,7 @@ func (inst *masterLife) handlePanic(p any, l *lifeWrapper) {
 	err, ok := p.(error)
 	if ok && err != nil {
 		l.err = err
-		vlog.Warn("Error: %v", err)
+		vlog.Error("Error: %v", err)
 	}
 }
 
