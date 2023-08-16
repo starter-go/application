@@ -57,7 +57,7 @@ func (inst *table) normalizeName(name string) string {
 func (inst *table) attr(name string) any {
 	name = inst.normalizeName(name)
 	inst.lock.Lock()
-	defer inst.lock.Lock()
+	defer inst.lock.Unlock()
 	return inst.t[name]
 }
 
