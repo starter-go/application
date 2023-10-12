@@ -6,9 +6,13 @@ github.com/starter-go/base v0.9.4 h1:PF48Jtp95iJTh8Y3LFmghjWHGaSEufA01unq5KlHFV0
 github.com/starter-go/base v0.9.4/go.mod h1:cTaamu+V1rSWCnfkeebl7yVZHlZiBHzxNVZap47wbtw=
 github.com/starter-go/base v0.9.5 h1:kH1VI0ags5rWG6zHt483c5bUie5q+RnPXMf1N1arAUY=
 github.com/starter-go/base v0.9.5/go.mod h1:cTaamu+V1rSWCnfkeebl7yVZHlZiBHzxNVZap47wbtw=
+github.com/starter-go/base v0.9.8 h1:RdKmOv/QXa2ba7JI/6+if/UwejvndX4u0WAp4xU7xPM=
+github.com/starter-go/base v0.9.8/go.mod h1:855h0lveIH1dMfP5u2SQp8LWJlgdstRAEM+MV6HRfLg=
 github.com/starter-go/vlog v0.0.0-20220717123140-f2a39cf6cc90 h1:XLuzWKA6Qg/7RHWD2O6rNRqS1t45L9EhE/2rme7qNz4=
 github.com/starter-go/vlog v0.0.0-20220717123140-f2a39cf6cc90/go.mod h1:bb4xDVyOD0+tAhaiscUmuzsFJ+/EL+qE79Je8U0ZqTQ=
 github.com/starter-go/vlog v0.9.0 h1:RuWHk9dLb9JPKflDrROsYhjAkoxAHI7eZ3avHyJXtQw=
 github.com/starter-go/vlog v0.9.0/go.mod h1:WSaU9IGbEaDe/Eoh2W8JOjSn6wdjfGkgBbxJxaqUI/0=
 github.com/starter-go/vlog v0.9.1 h1:944UIr5LW3QzF6st/kO7n/wgfZGnU61Dx/qZKH8F4EE=
 github.com/starter-go/vlog v0.9.1/go.mod h1:WSaU9IGbEaDe/Eoh2W8JOjSn6wdjfGkgBbxJxaqUI/0=
+github.com/starter-go/vlog v0.9.5 h1:Rh5L8KjicweDjH5UDKVQzqG2Q9/y63G1TWHe8u6VZpk=
+github.com/starter-go/vlog v0.9.5/go.mod h1:WSaU9IGbEaDe/Eoh2W8JOjSn6wdjfGkgBbxJxaqUI/0=
