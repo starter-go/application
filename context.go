@@ -8,6 +8,7 @@ import (
 	"github.com/starter-go/application/attributes"
 	"github.com/starter-go/application/components"
 	"github.com/starter-go/application/environment"
+	"github.com/starter-go/application/parameters"
 	"github.com/starter-go/application/properties"
 	"github.com/starter-go/application/resources"
 	"github.com/starter-go/base/safe"
@@ -28,6 +29,7 @@ type Context interface {
 	GetComponents() components.Table
 	GetEnvironment() environment.Table
 	GetProperties() properties.Table
+	GetParameters() parameters.Table
 	GetResources() resources.Table
 
 	GetModules() []Module

@@ -97,6 +97,10 @@ func (ctx *appContext) GetEnvironment() environment.Table {
 	return ctx.env
 }
 
+func (ctx *appContext) GetParameters() parameters.Table {
+	return ctx.params
+}
+
 func (ctx *appContext) GetProperties() properties.Table {
 	return ctx.props
 }
