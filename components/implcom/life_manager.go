@@ -1,6 +1,7 @@
 package implcom
 
 import (
+	"fmt"
 	"sort"
 
 	"github.com/starter-go/application"
@@ -130,10 +131,19 @@ func (inst *masterLife) handlePanic(p any, l *lifeWrapper) {
 	if p == nil || l == nil {
 		return
 	}
+
 	err, ok := p.(error)
 	if ok && err != nil {
 		l.err = err
 		vlog.Error("Error: %v", err)
+		return
+	}
+
+	msg, ok := p.(string)
+	if ok {
+		l.err = fmt.Errorf(msg)
+		vlog.Error("Error: %s", msg)
+		return
 	}
 }
 
