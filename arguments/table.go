@@ -2,6 +2,7 @@ package arguments
 
 import "github.com/starter-go/base/safe"
 
+// Table 表示用来存放命令行参数的对象
 type Table interface {
 	Raw() []string
 }
