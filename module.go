@@ -4,6 +4,14 @@ import (
 	"github.com/starter-go/application/resources"
 )
 
+const (
+	theModuleName     = "github.com/starter-go/application"
+	theModuleVersion  = "v0.9.18"
+	theModuleRevision = 2
+)
+
+////////////////////////////////////////////////////////////////////////////////
+
 // Module 表示一个 Starter 模块
 type Module interface {
 	Name() string
