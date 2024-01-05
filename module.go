@@ -6,8 +6,8 @@ import (
 
 const (
 	theModuleName     = "github.com/starter-go/application"
-	theModuleVersion  = "v0.9.20"
-	theModuleRevision = 4
+	theModuleVersion  = "v0.9.21"
+	theModuleRevision = 5
 )
 
 ////////////////////////////////////////////////////////////////////////////////

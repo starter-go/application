@@ -26,8 +26,9 @@ func (inst *injection) _Impl() application.Injection {
 
 func (inst *injection) init(parent application.Context, scope components.Scope) *injection {
 
-	lm := &lifeManager{}
-	lm.init()
+	lm := application.NewLifeManager()
+	//  &lifeManager{}
+	// lm.init()
 
 	inst.parent = parent
 	inst.scope = scope
