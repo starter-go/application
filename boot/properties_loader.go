@@ -59,8 +59,17 @@ func (inst *propertiesLoader) listProperties() []properties.Table {
 	inst.loadPropertiesFromRes(builder)
 	inst.loadPropertiesFromExeDir(builder)
 	inst.loadPropertiesFromArgs(builder)
+	inst.loadPropertiesFromBootstrap(builder)
 
 	return builder.all
+}
+
+func (inst *propertiesLoader) loadPropertiesFromBootstrap(builder *propertiesLoaderBuilder) {
+	table := inst.b.collections.Properties
+	if table == nil {
+		return
+	}
+	builder.add(table)
 }
 
 func (inst *propertiesLoader) loadPropertiesFromArgs(builder *propertiesLoaderBuilder) {
