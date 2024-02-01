@@ -1,8 +1,10 @@
 package boot
 
 import (
+	"os"
 	"strings"
 
+	"github.com/starter-go/afs/files"
 	"github.com/starter-go/application"
 	"github.com/starter-go/application/properties"
 	"github.com/starter-go/vlog"
@@ -97,7 +99,42 @@ func (inst *propertiesLoader) loadPropertiesFromArgs(builder *propertiesLoaderBu
 }
 
 func (inst *propertiesLoader) loadPropertiesFromExeDir(builder *propertiesLoaderBuilder) {
-	// todo ...
+	// try get cached
+	table := inst.propertiesFromExeDir
+	if table != nil {
+		builder.add(table)
+		return
+	}
+	// locate 'application.properties' file
+	exepath := ""
+	for i, a := range os.Args {
+		if i == 0 {
+			exepath = a
+			break
+		}
+	}
+	if exepath == "" {
+		return
+	}
+	exefile := files.FS().NewPath(exepath)
+	if !exefile.IsFile() {
+		return
+	}
+	apppropfile := exefile.GetParent().GetChild("application.properties")
+	if !apppropfile.IsFile() {
+		return
+	}
+	// load from file
+	str, err := apppropfile.GetIO().ReadText(nil)
+	if err != nil {
+		panic(err)
+	}
+	table, err = properties.Parse(str, nil)
+	if err != nil {
+		panic(err)
+	}
+	builder.add(table)
+	inst.propertiesFromExeDir = table
 }
 
 func (inst *propertiesLoader) loadPropertiesFromRes(builder *propertiesLoaderBuilder) {

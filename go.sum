@@ -1,3 +1,5 @@
+github.com/starter-go/afs v0.9.5 h1:nlXQwCzqI0fht6RrQYj+CBCH2dPX2j7HArkEf11Vhjw=
+github.com/starter-go/afs v0.9.5/go.mod h1:Kuwz+TntvRVUYJuHWfR9hkEIcBiIC3ScW9IS/gjJulM=
 github.com/starter-go/base v0.9.2 h1:7ibuwdwvWcQGZKm53H/rbiT0jy37QxQStfYQxPi85OY=
 github.com/starter-go/base v0.9.2/go.mod h1:cTaamu+V1rSWCnfkeebl7yVZHlZiBHzxNVZap47wbtw=
 github.com/starter-go/base v0.9.3 h1:VrzYqccuMVQzWF/6/4GEZa/EzG3LMQSPLZcSSwSxe48=
