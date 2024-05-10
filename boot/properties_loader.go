@@ -2,6 +2,7 @@ package boot
 
 import (
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/starter-go/afs/files"
@@ -62,6 +63,7 @@ func (inst *propertiesLoader) listProperties() []properties.Table {
 	inst.loadPropertiesFromExeDir(builder)
 	inst.loadPropertiesFromArgs(builder)
 	inst.loadPropertiesFromBootstrap(builder)
+	inst.loadPropertiesFromLocalFile(builder)
 
 	return builder.all
 }
@@ -69,6 +71,35 @@ func (inst *propertiesLoader) listProperties() []properties.Table {
 func (inst *propertiesLoader) loadPropertiesFromBootstrap(builder *propertiesLoaderBuilder) {
 	table := inst.b.collections.Properties
 	if table == nil {
+		return
+	}
+	builder.add(table)
+}
+
+func (inst *propertiesLoader) loadPropertiesFromLocalFile(builder *propertiesLoaderBuilder) {
+	const (
+		keyFile    = "application.properties.file"
+		keyEnabled = "application.properties.enabled"
+	)
+	strEnabled := builder.getProperty(keyEnabled)
+	enabled, _ := strconv.ParseBool(strEnabled)
+	if !enabled {
+		return
+	}
+	strFile := builder.getProperty(keyFile)
+	if strFile == "" {
+		return
+	}
+	vlog.Info("load properties from file [%s]", strFile)
+	path := files.FS().NewPath(strFile)
+	text, err := path.GetIO().ReadText(nil)
+	if err != nil {
+		vlog.Warn(err.Error())
+		return
+	}
+	table, err := properties.Parse(text, nil)
+	if err != nil {
+		vlog.Warn(err.Error())
 		return
 	}
 	builder.add(table)
@@ -209,6 +240,21 @@ func (inst *propertiesLoaderBuilder) add(t properties.Table) {
 		return
 	}
 	inst.all = append(inst.all, t)
+}
+
+func (inst *propertiesLoaderBuilder) getProperty(name string) string {
+	all := inst.all
+	for i := len(all) - 1; i >= 0; i-- {
+		t := all[i]
+		if t == nil {
+			continue
+		}
+		value := t.GetProperty(name)
+		if value != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 ////////////////////////////////////////////////////////////////////////////////
