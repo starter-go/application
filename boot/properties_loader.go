@@ -30,7 +30,7 @@ func (inst *propertiesLoader) load() error {
 
 func (inst *propertiesLoader) loadProfileName() error {
 	const name = "application.profiles.active"
-	list := inst.listProperties()
+	list := inst.listProperties(0)
 	profile := inst.profile
 	for _, t := range list {
 		value, err := t.GetPropertyRequired(name)
@@ -47,7 +47,7 @@ func (inst *propertiesLoader) loadProfileName() error {
 
 func (inst *propertiesLoader) loadAllProperties() error {
 	dst := properties.NewTable(nil)
-	list := inst.listProperties()
+	list := inst.listProperties(1)
 	for _, t := range list {
 		dst.Import(t.Export(nil))
 	}
@@ -55,9 +55,10 @@ func (inst *propertiesLoader) loadAllProperties() error {
 	return nil
 }
 
-func (inst *propertiesLoader) listProperties() []properties.Table {
+// repeat:表示被调用的次数 = [0,1,2 ...]
+func (inst *propertiesLoader) listProperties(repeat int) []properties.Table {
 
-	builder := &propertiesLoaderBuilder{}
+	builder := &propertiesLoaderBuilder{repeat: repeat}
 
 	inst.loadPropertiesFromRes(builder)
 	inst.loadPropertiesFromExeDir(builder)
@@ -81,6 +82,9 @@ func (inst *propertiesLoader) loadPropertiesFromLocalFile(builder *propertiesLoa
 		keyFile    = "application.properties.file"
 		keyEnabled = "application.properties.enabled"
 	)
+	if builder.repeat < 1 {
+		return
+	}
 	strEnabled := builder.getProperty(keyEnabled)
 	enabled, _ := strconv.ParseBool(strEnabled)
 	if !enabled {
@@ -232,7 +236,8 @@ func (inst *propertiesLoaderModuleHolder) loadByPath(path string) (properties.Ta
 ////////////////////////////////////////////////////////////////////////////////
 
 type propertiesLoaderBuilder struct {
-	all []properties.Table
+	all    []properties.Table
+	repeat int
 }
 
 func (inst *propertiesLoaderBuilder) add(t properties.Table) {
