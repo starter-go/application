@@ -2,6 +2,7 @@ package properties
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -32,6 +33,9 @@ type Getter interface {
 	GetUint16(name string, defaultValue ...uint16) uint16
 	GetUint32(name string, defaultValue ...uint32) uint32
 	GetUint64(name string, defaultValue ...uint64) uint64
+
+	// 根据给出的名称前缀和后缀，列出项目 id
+	ListItems(prefix, suffix string) []string
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -397,4 +401,27 @@ func (g *myGetter) GetUint64(name string, defaultValue ...uint64) uint64 {
 		return value
 	}
 	return 0
+}
+
+func (g *myGetter) ListItems(prefix, suffix string) []string {
+
+	dst := make([]string, 0)
+	src := g.table.Export(nil)
+
+	len1 := len(prefix)
+	len2 := len(suffix)
+
+	for k, v := range src {
+		len3 := len(k)
+		if len3 > len1+len2 {
+			if strings.HasPrefix(k, prefix) && strings.HasSuffix(k, suffix) {
+				if v != "" {
+					id := k[len1 : len3-len2]
+					dst = append(dst, id)
+				}
+			}
+		}
+	}
+	sort.Strings(dst)
+	return dst
 }
